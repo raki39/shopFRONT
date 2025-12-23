@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { chatSessionsAPI } from '@/lib/api'
 import type { ChatSession } from '@/lib/types'
-import { Plus, MessageSquare, Trash2, Loader2, Settings } from 'lucide-react'
+import { Plus, MessageSquare, Trash2, Loader2, Settings, LayoutDashboard } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
@@ -14,6 +15,7 @@ interface ChatSidebarProps {
 }
 
 export default function ChatSidebar({ agentId, onSelectSession, onNewChat }: ChatSidebarProps) {
+  const router = useRouter()
   const { selectedChatSession, setSettingsOpen } = useStore()
   const [sessions, setSessions] = useState<ChatSession[]>([])
   const [loading, setLoading] = useState(true)
@@ -86,8 +88,16 @@ export default function ChatSidebar({ agentId, onSelectSession, onNewChat }: Cha
         </div>
       </div>
 
-      {/* New Chat Button */}
-      <div className="p-4 border-b border-gray-200">
+      {/* Dashboard and New Chat Buttons */}
+      <div className="p-4 border-b border-gray-200 space-y-2">
+        <button
+          onClick={() => router.push('/em-construcao')}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition-colors"
+        >
+          <LayoutDashboard className="w-4 h-4" />
+          <span className="text-sm">Dashboard</span>
+        </button>
+
         <button
           onClick={handleNewChat}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors"
