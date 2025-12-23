@@ -215,33 +215,6 @@ export default function DashboardPage() {
                 >
                   <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
 
-                  {message.sql_query && (
-                    <div className="mt-2 pt-2 border-t border-gray-200">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-1.5">
-                          <Code className="w-3.5 h-3.5" />
-                          <span className="text-xs font-semibold">SQL Query</span>
-                        </div>
-                        <button
-                          onClick={() => handleCopyQuery(message.id, message.sql_query!)}
-                          className="p-1 hover:bg-gray-100 rounded transition-colors"
-                          title="Copiar query"
-                        >
-                          {copiedQuery === message.id ? (
-                            <Check className="w-3.5 h-3.5 text-green-600" />
-                          ) : (
-                            <Copy className="w-3.5 h-3.5 text-gray-400" />
-                          )}
-                        </button>
-                      </div>
-                      <div className="bg-gray-900 text-white p-2.5 rounded max-w-full overflow-hidden">
-                        <pre className="text-xs font-mono leading-relaxed whitespace-pre-wrap break-all overflow-x-auto">
-                          {message.sql_query}
-                        </pre>
-                      </div>
-                    </div>
-                  )}
-
                   {message.graph_url && (
                     <GraphImage graphUrl={message.graph_url} />
                   )}

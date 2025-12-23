@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AgentAPI - Sistema de Agentes Inteligentes",
+  title: "VarejoIA",
   description: "Plataforma de agentes inteligentes para análise de dados",
 };
 

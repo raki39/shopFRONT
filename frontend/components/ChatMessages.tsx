@@ -117,18 +117,6 @@ export default function ChatMessages({ sessionId, agentId }: ChatMessagesProps) 
               )}
             >
               <p className="whitespace-pre-wrap break-words">{message.content}</p>
-              
-              {message.sql_query && (
-                <div className="mt-3 pt-3 border-t border-gray-300">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Code className="w-4 h-4" />
-                    <span className="text-xs font-semibold">SQL Query:</span>
-                  </div>
-                  <pre className="text-xs bg-gray-900 text-green-400 p-3 rounded-lg overflow-x-auto">
-                    {message.sql_query}
-                  </pre>
-                </div>
-              )}
             </div>
 
             {message.role === 'user' && (
