@@ -39,7 +39,7 @@ export default function LoginPage() {
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           {/* Logo */}
           <div className="flex justify-center mb-8">
-            <img src="/bioo-logo.png" alt="Bioo Logo" className="h-16 w-auto object-contain" />
+            <img src="/image-1.png" alt="Shopping Brasil" className="h-14 w-auto object-contain" />
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}

@@ -72,9 +72,18 @@ export default function ChatSidebar({ agentId, onSelectSession, onNewChat }: Cha
 
   return (
     <div className="w-72 bg-white border-r border-gray-200 flex flex-col h-full">
-      {/* Logo */}
+      {/* Logos */}
       <div className="p-5 border-b border-gray-200">
-        <img src="/bioo-logo.png" alt="Bioo Logo" className="w-11/12 mx-auto h-auto object-contain" />
+        <div className="flex flex-col items-center gap-3">
+          {/* Varejo - Maior no topo */}
+          <img src="/VAREJO180.png" alt="Varejo" className="w-44 h-auto object-contain" />
+
+          {/* Login - Menor */}
+          <img src="/login-logo.png" alt="Login" className="w-28 h-auto object-contain" />
+
+          {/* Image - Menor */}
+          <img src="/image-1.png" alt="Shopping Brasil" className="w-28 h-auto object-contain" />
+        </div>
       </div>
 
       {/* New Chat Button */}
