@@ -78,13 +78,16 @@ export default function ChatSidebar({ agentId, onSelectSession, onNewChat }: Cha
       <div className="p-5 border-b border-gray-200">
         <div className="flex flex-col items-center gap-3">
           {/* Varejo - Maior no topo */}
-          <img src="/VAREJO180.png" alt="Varejo" className="w-44 h-auto object-contain" />
+          <img src="/VAREJO180.png" alt="Varejo" className="w-52 h-auto object-contain" />
 
-          {/* Login - Menor */}
-          <img src="/login-logo.png" alt="Login" className="w-28 h-auto object-contain" />
+          {/* Powered By */}
+          <p className="text-xs font-semibold text-gray-500 tracking-wide mt-2">POWERED BY</p>
 
-          {/* Image - Menor */}
-          <img src="/image-1.png" alt="Shopping Brasil" className="w-28 h-auto object-contain" />
+          {/* Shopping Brasil - Menor */}
+          <img src="/image-1.png" alt="Shopping Brasil" className="w-36 h-auto object-contain" />
+
+          {/* Sellbit (Login) - Menor */}
+          <img src="/login-logo.png" alt="Sellbit" className="w-28 h-auto object-contain" />
         </div>
       </div>
 
