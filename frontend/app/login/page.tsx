@@ -37,9 +37,19 @@ export default function LoginPage() {
       <div className="w-full max-w-md p-8">
         {/* Login Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-          {/* Logo */}
-          <div className="flex justify-center mb-8">
-            <img src="/image-1.png" alt="Shopping Brasil" className="h-14 w-auto object-contain" />
+          {/* Logos */}
+          <div className="flex flex-col items-center mb-8 gap-2">
+            {/* Varejo 180 */}
+            <img src="/VAREJO180.png" alt="Varejo" className="h-16 w-auto object-contain" />
+
+            {/* Powered By */}
+            <p className="text-xs font-semibold text-gray-500 tracking-wide">POWERED BY</p>
+
+            {/* Sellbit e Shopping Brasil */}
+            <div className="flex flex-col items-center gap-2">
+              <img src="/login-logo.png" alt="Sellbit" className="h-10 w-auto object-contain" />
+              <img src="/image-1.png" alt="Shopping Brasil" className="h-10 w-auto object-contain" />
+            </div>
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}

@@ -86,7 +86,19 @@ export default function SelectAgentPage() {
       <div className="bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <img src="/image-1.png" alt="Shopping Brasil" className="h-10 w-auto object-contain" />
+            {/* Logos horizontais */}
+            <div className="flex items-center gap-3">
+              {/* Varejo 180 */}
+              <img src="/VAREJO180.png" alt="Varejo" className="h-10 w-auto object-contain" />
+
+              {/* Powered By */}
+              <span className="text-xs font-semibold text-gray-500 tracking-wide">POWERED BY</span>
+
+              {/* Sellbit e Shopping Brasil */}
+              <img src="/login-logo.png" alt="Sellbit" className="h-8 w-auto object-contain" />
+              <img src="/image-1.png" alt="Shopping Brasil" className="h-8 w-auto object-contain" />
+            </div>
+
             <div>
               <h1 className="text-xl font-semibold text-gray-900">Bem-vindo, {user?.nome}!</h1>
               <p className="text-sm text-gray-500">Selecione um agente para começar</p>
