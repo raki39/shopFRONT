@@ -79,6 +79,14 @@ export const authAPI = {
   },
 }
 
+// Users API
+export const usersAPI = {
+  updateMe: async (data: { onboarding_completed?: boolean }): Promise<User> => {
+    const response = await api.patch<User>('/users/me', data)
+    return response.data
+  },
+}
+
 // Agents API
 export const agentsAPI = {
   list: async (): Promise<Agent[]> => {

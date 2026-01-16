@@ -6,9 +6,10 @@ import { Loader2, BarChart3, AlertCircle, ZoomIn, X } from 'lucide-react'
 
 interface GraphImageProps {
   graphUrl: string
+  darkMode?: boolean
 }
 
-export default function GraphImage({ graphUrl }: GraphImageProps) {
+export default function GraphImage({ graphUrl, darkMode = false }: GraphImageProps) {
   const [blobUrl, setBlobUrl] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -41,31 +42,37 @@ export default function GraphImage({ graphUrl }: GraphImageProps) {
 
   if (loading) {
     return (
-      <div className="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center">
+      <div className={`mt-3 p-4 rounded-lg border flex items-center justify-center ${
+        darkMode ? 'bg-white/5 border-white/10' : 'bg-gray-50 border-gray-200'
+      }`}>
         <Loader2 className="w-5 h-5 animate-spin text-indigo-500 mr-2" />
-        <span className="text-sm text-gray-500">Carregando gráfico...</span>
+        <span className={`text-sm ${darkMode ? 'text-white/50' : 'text-gray-500'}`}>Carregando gráfico...</span>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="mt-3 p-4 bg-red-50 rounded-lg border border-red-200 flex items-center">
-        <AlertCircle className="w-5 h-5 text-red-500 mr-2" />
-        <span className="text-sm text-red-600">{error}</span>
+      <div className={`mt-3 p-4 rounded-lg border flex items-center ${
+        darkMode ? 'bg-red-500/10 border-red-500/20' : 'bg-red-50 border-red-200'
+      }`}>
+        <AlertCircle className={`w-5 h-5 mr-2 ${darkMode ? 'text-red-400' : 'text-red-500'}`} />
+        <span className={`text-sm ${darkMode ? 'text-red-300' : 'text-red-600'}`}>{error}</span>
       </div>
     )
   }
 
   return (
     <>
-      <div className="mt-3 pt-3 border-t border-gray-200">
+      <div className={`mt-3 pt-3 border-t ${darkMode ? 'border-white/10' : 'border-gray-200'}`}>
         <div className="flex items-center gap-1.5 mb-2">
-          <BarChart3 className="w-3.5 h-3.5 text-indigo-500" />
-          <span className="text-xs font-semibold text-gray-700">Gráfico</span>
+          <BarChart3 className={`w-3.5 h-3.5 ${darkMode ? 'text-violet-400' : 'text-indigo-500'}`} />
+          <span className={`text-xs font-semibold ${darkMode ? 'text-white' : 'text-gray-700'}`}>Gráfico</span>
         </div>
-        <div 
-          className="relative bg-white rounded-lg border border-gray-200 p-2 cursor-pointer group"
+        <div
+          className={`relative rounded-lg border p-2 cursor-pointer group ${
+            darkMode ? 'bg-white/5 border-white/10' : 'bg-white border-gray-200'
+          }`}
           onClick={() => setIsZoomed(true)}
         >
           <img
