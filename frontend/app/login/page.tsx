@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { authAPI } from '@/lib/api'
+import { authAPI, agentsAPI } from '@/lib/api'
 import { useStore } from '@/lib/store'
 import { LogIn, Loader2, Sun, Moon, Zap } from 'lucide-react'
 import { useTheme } from '@/hooks/useTheme'
@@ -11,6 +11,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 export default function LoginPage() {
   const router = useRouter()
   const setAuth = useStore((state) => state.setAuth)
+  const setSelectedAgent = useStore((state) => state.setSelectedAgent)
 
   // Theme
   const { darkMode, toggleDarkMode, mounted } = useTheme()
@@ -52,7 +53,20 @@ export default function LoginPage() {
         // Continue with login response user data
       }
 
-      router.push('/select-agent')
+      // Fetch agents and redirect directly to chat with first agent
+      try {
+        const agents = await agentsAPI.list()
+        if (agents && agents.length > 0) {
+          setSelectedAgent(agents[0])
+          router.push('/chat')
+        } else {
+          // No agents, fallback to select-agent page
+          router.push('/select-agent')
+        }
+      } catch (agentError) {
+        console.warn('Could not fetch agents:', agentError)
+        router.push('/select-agent')
+      }
     } catch (err: any) {
       console.error('Login error:', err)
       setError(err.response?.data?.detail || 'Erro ao fazer login. Verifique suas credenciais.')

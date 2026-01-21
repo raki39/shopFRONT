@@ -169,6 +169,10 @@ export function useOnboarding({ page, darkMode, enabled = true }: UseOnboardingO
       stageRadius: 8,
       allowClose: true,
       smoothScroll: true,
+      // Prevent closing when clicking outside the popover - only close via X button
+      overlayClickBehavior: () => {
+        // Do nothing when clicking on overlay - tour only closes via X button
+      },
       onDestroyed: () => {
         if (page === 'chat') {
           completeOnboarding()
