@@ -64,7 +64,7 @@ export const authAPI = {
     const formData = new FormData()
     formData.append('username', email)
     formData.append('password', password)
-    
+
     const response = await api.post<LoginResponse>('/auth/login', formData, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -73,8 +73,35 @@ export const authAPI = {
     return response.data
   },
 
+  register: async (nome: string, email: string, password: string): Promise<User> => {
+    const response = await api.post<User>('/auth/register', {
+      nome,
+      email,
+      password,
+    })
+    return response.data
+  },
+
   me: async (): Promise<User> => {
     const response = await api.get<User>('/auth/me')
+    return response.data
+  },
+
+  forgotPassword: async (email: string): Promise<{ message: string }> => {
+    const response = await api.post<{ message: string }>('/auth/forgot-password', { email })
+    return response.data
+  },
+
+  verifyResetToken: async (token: string): Promise<{ valid: boolean }> => {
+    const response = await api.get<{ valid: boolean }>(`/auth/verify-reset-token/${token}`)
+    return response.data
+  },
+
+  resetPassword: async (token: string, newPassword: string): Promise<{ message: string }> => {
+    const response = await api.post<{ message: string }>('/auth/reset-password', {
+      token,
+      new_password: newPassword,
+    })
     return response.data
   },
 }
@@ -99,8 +126,21 @@ export const agentsAPI = {
     return response.data
   },
 
+  create: async (data: any): Promise<Agent> => {
+    const response = await api.post<Agent>('/agents', data)
+    return response.data
+  },
+
   update: async (id: number, data: Partial<Agent>): Promise<Agent> => {
     const response = await api.patch<Agent>(`/agents/${id}`, data)
+    return response.data
+  },
+}
+
+// Contexts API
+export const contextsAPI = {
+  create: async (data: { nome: string; context_type: string; context_text: string }): Promise<any> => {
+    const response = await api.post('/contexts', data)
     return response.data
   },
 }

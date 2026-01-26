@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { authAPI, agentsAPI } from '@/lib/api'
 import { useStore } from '@/lib/store'
-import { LogIn, Loader2, Sun, Moon, Zap } from 'lucide-react'
+import { LogIn, Loader2, Sun, Moon } from 'lucide-react'
 import { useTheme } from '@/hooks/useTheme'
 import { useTranslation } from '@/hooks/useTranslation'
 
@@ -177,12 +178,22 @@ export default function LoginPage() {
             </div>
           )}
 
+          {/* Forgot Password Link */}
+          <div className="text-left">
+            <Link
+              href="/forgot-password"
+              className={`text-sm ${darkMode ? 'text-violet-400 hover:text-violet-300' : 'text-violet-600 hover:text-violet-500'}`}
+            >
+              {t.login.forgotPassword}
+            </Link>
+          </div>
+
           {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
             className={`
-              w-full py-2 px-4 mt-6 rounded-xl font-medium transition-all duration-300
+              w-full py-2 px-4 mt-4 rounded-xl font-medium transition-all duration-300
               disabled:opacity-50 disabled:cursor-not-allowed
               flex items-center justify-center gap-2
               ${darkMode
@@ -203,6 +214,14 @@ export default function LoginPage() {
               </>
             )}
           </button>
+
+          {/* Register Link */}
+          <p className={`text-center text-sm ${textSecondary} mt-4`}>
+            {t.login.noAccount}{' '}
+            <Link href="/register" className={`font-medium ${darkMode ? 'text-violet-400 hover:text-violet-300' : 'text-violet-600 hover:text-violet-500'}`}>
+              {t.login.register}
+            </Link>
+          </p>
         </form>
       </div>
 
