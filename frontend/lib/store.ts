@@ -23,6 +23,10 @@ interface AppState {
   toggleSidebar: () => void
   isSettingsOpen: boolean
   setSettingsOpen: (open: boolean) => void
+
+  // Developer Options (Admin only)
+  showSqlQuery: boolean
+  setShowSqlQuery: (show: boolean) => void
 }
 
 export const useStore = create<AppState>()(
@@ -55,6 +59,10 @@ export const useStore = create<AppState>()(
       toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
       isSettingsOpen: false,
       setSettingsOpen: (open) => set({ isSettingsOpen: open }),
+
+      // Developer Options (Admin only)
+      showSqlQuery: false,
+      setShowSqlQuery: (show) => set({ showSqlQuery: show }),
     }),
     {
       name: 'agent-app-storage',
@@ -62,6 +70,7 @@ export const useStore = create<AppState>()(
         user: state.user,
         token: state.token,
         selectedAgent: state.selectedAgent,
+        showSqlQuery: state.showSqlQuery,
       }),
     }
   )

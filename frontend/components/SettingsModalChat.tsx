@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { X, Database, History, Users, Check, Loader2, AlertCircle, Settings, Moon, Sun, Globe, ChevronDown } from 'lucide-react'
+import { X, Database, History, Users, Check, Loader2, AlertCircle, Settings, Moon, Sun, Globe, ChevronDown, Code, RotateCcw } from 'lucide-react'
 import { useStore } from '@/lib/store'
-import { connectionsAPI, agentsAPI } from '@/lib/api'
+import { connectionsAPI, agentsAPI, usersAPI } from '@/lib/api'
 import type { Connection } from '@/lib/types'
+import { UserRole } from '@/lib/types'
 import { useTranslation } from '@/hooks/useTranslation'
 
 interface SettingsModalChatProps {
@@ -15,7 +16,7 @@ interface SettingsModalChatProps {
   onToggleDarkMode?: () => void
 }
 
-type TabType = 'system' | 'connections' | 'history'
+type TabType = 'system' | 'connections' | 'history' | 'developer'
 
 interface MenuItem {
   id: TabType
@@ -25,8 +26,11 @@ interface MenuItem {
 
 export default function SettingsModalChat({ isOpen, onClose, darkMode, onToggleDarkMode }: SettingsModalChatProps) {
   const router = useRouter()
-  const { selectedAgent, setSelectedAgent } = useStore()
+  const { user, setUser, selectedAgent, setSelectedAgent, showSqlQuery, setShowSqlQuery } = useStore()
   const [activeTab, setActiveTab] = useState<TabType>('system')
+
+  // Check if user is admin
+  const isAdmin = user?.role === UserRole.ADMIN
 
   // Translation hook
   const { t, language, setLanguage } = useTranslation()
@@ -52,11 +56,16 @@ export default function SettingsModalChat({ isOpen, onClose, darkMode, onToggleD
   // Language dropdown state
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
 
-  // Menu items - using translations
+  // Developer options state (Admin only)
+  const [resettingTour, setResettingTour] = useState(false)
+  const [tourResetSuccess, setTourResetSuccess] = useState(false)
+
+  // Menu items - using translations (Developer tab only for admins)
   const menuItems: MenuItem[] = [
     { id: 'system', label: t.settings.system, icon: <Settings className="w-4 h-4" /> },
     { id: 'connections', label: t.settings.connections, icon: <Database className="w-4 h-4" /> },
     { id: 'history', label: t.settings.historyTab, icon: <History className="w-4 h-4" /> },
+    ...(isAdmin ? [{ id: 'developer' as TabType, label: t.settings.developer, icon: <Code className="w-4 h-4" /> }] : []),
   ]
 
   // Theme styles - Sidebar matching chat sidebar
@@ -445,6 +454,104 @@ export default function SettingsModalChat({ isOpen, onClose, darkMode, onToggleD
                   <p className={`text-sm ${darkMode ? 'text-blue-300' : 'text-blue-700'}`}>
                     {t.settings.historyInfo}
                   </p>
+                </div>
+              </div>
+            )}
+
+            {/* Developer Tab (Admin only) */}
+            {activeTab === 'developer' && isAdmin && (
+              <div className="space-y-6">
+                {/* Show SQL Query Option */}
+                <div className="space-y-3">
+                  <span className={`text-sm ${textSecondary}`}>{t.settings.developerOptions}</span>
+                  <div className="mt-2">
+                    <div className={`flex items-center justify-between p-4 rounded-xl ${cardBg} ${cardBorder}`}>
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${darkMode ? 'bg-violet-500/20' : 'bg-violet-100'}`}>
+                          <Code className={`w-5 h-5 ${darkMode ? 'text-violet-400' : 'text-violet-600'}`} />
+                        </div>
+                        <div>
+                          <p className={`font-medium ${textPrimary} text-sm`}>{t.settings.showSqlQuery}</p>
+                          <p className={`text-xs ${textMuted}`}>{t.settings.showSqlQueryDesc}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setShowSqlQuery(!showSqlQuery)}
+                        className={`relative w-11 h-6 rounded-full transition-colors ${
+                          showSqlQuery ? 'bg-violet-500' : (darkMode ? 'bg-white/20' : 'bg-slate-300')
+                        }`}
+                      >
+                        <div className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm transition-all ${
+                          showSqlQuery ? 'left-6' : 'left-1'
+                        }`} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Reset Tour Option */}
+                <div className="space-y-3">
+                  <span className={`text-sm ${textSecondary}`}>{t.settings.resetTour}</span>
+                  <div className="mt-2">
+                    <div className={`p-4 rounded-xl ${cardBg} ${cardBorder}`}>
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${darkMode ? 'bg-amber-500/20' : 'bg-amber-100'}`}>
+                          <RotateCcw className={`w-5 h-5 ${darkMode ? 'text-amber-400' : 'text-amber-600'}`} />
+                        </div>
+                        <div>
+                          <p className={`font-medium ${textPrimary} text-sm`}>{t.settings.resetTour}</p>
+                          <p className={`text-xs ${textMuted}`}>{t.settings.resetTourDesc}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={async () => {
+                          setResettingTour(true)
+                          setTourResetSuccess(false)
+                          try {
+                            // Update user in backend
+                            const updatedUser = await usersAPI.updateMe({ onboarding_completed: false })
+                            setUser(updatedUser)
+                            // Clear session storage tour variables
+                            sessionStorage.removeItem('onboarding-tour-completed')
+                            sessionStorage.removeItem('onboarding-tour-step')
+                            sessionStorage.removeItem('onboarding_started_chat')
+                            sessionStorage.removeItem('onboarding_started_select-agent')
+                            setTourResetSuccess(true)
+                            setTimeout(() => setTourResetSuccess(false), 3000)
+                          } catch (error) {
+                            console.error('Error resetting tour:', error)
+                          } finally {
+                            setResettingTour(false)
+                          }
+                        }}
+                        disabled={resettingTour}
+                        className={`w-full py-2.5 px-4 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 ${
+                          tourResetSuccess
+                            ? 'bg-emerald-500 text-white'
+                            : darkMode
+                            ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-400'
+                            : 'bg-amber-100 hover:bg-amber-200 text-amber-700'
+                        } disabled:opacity-50`}
+                      >
+                        {resettingTour ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            {t.settings.saving}
+                          </>
+                        ) : tourResetSuccess ? (
+                          <>
+                            <Check className="w-4 h-4" />
+                            {t.settings.resetTourSuccess}
+                          </>
+                        ) : (
+                          <>
+                            <RotateCcw className="w-4 h-4" />
+                            {t.settings.resetTourButton}
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

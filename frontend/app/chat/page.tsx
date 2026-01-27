@@ -29,12 +29,14 @@ import {
   RefreshCw,
   Loader2,
   Bot,
-  User
+  User,
+  Copy,
+  Check
 } from 'lucide-react'
 
 export default function ChatPage() {
   const router = useRouter()
-  const { user, selectedAgent, selectedChatSession, setSelectedChatSession, isSettingsOpen, setSettingsOpen } = useStore()
+  const { user, selectedAgent, selectedChatSession, setSelectedChatSession, isSettingsOpen, setSettingsOpen, showSqlQuery } = useStore()
 
   // Theme
   const { darkMode, toggleDarkMode, mounted: themeMounted } = useTheme()
@@ -79,6 +81,9 @@ export default function ChatPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  // SQL Copy feedback state
+  const [copiedSqlId, setCopiedSqlId] = useState<number | null>(null)
 
   // Sugestões de perguntas (usando traduções)
   const suggestions = [
@@ -697,6 +702,44 @@ export default function ChatPage() {
                     </p>
                     {message.graph_url && (
                       <GraphImage graphUrl={message.graph_url} darkMode={darkMode} />
+                    )}
+                    {/* SQL Query Display (Admin only when enabled) */}
+                    {message.role === 'assistant' && showSqlQuery && message.sql_query && (
+                      <div className={`mt-3 p-3 rounded-xl ${darkMode ? 'bg-white/5 border border-white/10' : 'bg-slate-100 border border-slate-200'}`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={`text-xs font-medium ${textSecondary}`}>{t.settings.sqlQueryLabel}</span>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(message.sql_query!)
+                              setCopiedSqlId(message.id)
+                              setTimeout(() => setCopiedSqlId(null), 2000)
+                            }}
+                            className={`flex items-center gap-1 text-xs px-2 py-1 rounded transition-all ${
+                              copiedSqlId === message.id
+                                ? 'bg-emerald-500/20 text-emerald-500'
+                                : darkMode ? 'hover:bg-white/10 text-white/60' : 'hover:bg-slate-200 text-slate-600'
+                            }`}
+                          >
+                            {copiedSqlId === message.id ? (
+                              <>
+                                <Check className="w-3 h-3" />
+                                {t.settings.sqlCopied}
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3 h-3" />
+                                {t.settings.copySql}
+                              </>
+                            )}
+                          </button>
+                        </div>
+                        {/* Inner card for SQL code */}
+                        <div className={`p-3 rounded-lg ${darkMode ? 'bg-black/40' : 'bg-slate-200'}`}>
+                          <code className={`text-xs ${darkMode ? 'text-white' : 'text-slate-800'} block whitespace-pre-wrap break-all font-mono`}>
+                            {message.sql_query}
+                          </code>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>

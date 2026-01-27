@@ -182,6 +182,19 @@ export const translations = {
       conversationHistory: 'Histórico de conversas',
       keepContext: 'Mantém contexto entre mensagens',
       historyInfo: 'O histórico está sempre ativo no sistema atual. Esta configuração é apenas para preferência visual.',
+
+      // Developer (Admin only)
+      developer: 'Developer',
+      developerOptions: 'Opções de desenvolvedor',
+      showSqlQuery: 'Mostrar SQL Query',
+      showSqlQueryDesc: 'Exibe a query SQL utilizada nas respostas do agente',
+      resetTour: 'Resetar Tour Guiado',
+      resetTourDesc: 'Reinicia o tour guiado para ver novamente as instruções',
+      resetTourButton: 'Resetar Tour',
+      resetTourSuccess: 'Tour resetado com sucesso!',
+      sqlQueryLabel: 'SQL Query utilizada:',
+      copySql: 'Copiar SQL',
+      sqlCopied: 'SQL copiado!',
     },
     
     // Onboarding
@@ -388,6 +401,19 @@ export const translations = {
       conversationHistory: 'Conversation history',
       keepContext: 'Keeps context between messages',
       historyInfo: 'History is always active in the current system. This setting is for visual preference only.',
+
+      // Developer (Admin only)
+      developer: 'Developer',
+      developerOptions: 'Developer options',
+      showSqlQuery: 'Show SQL Query',
+      showSqlQueryDesc: 'Displays the SQL query used in agent responses',
+      resetTour: 'Reset Guided Tour',
+      resetTourDesc: 'Restart the guided tour to see the instructions again',
+      resetTourButton: 'Reset Tour',
+      resetTourSuccess: 'Tour reset successfully!',
+      sqlQueryLabel: 'SQL Query used:',
+      copySql: 'Copy SQL',
+      sqlCopied: 'SQL copied!',
     },
     
     // Onboarding
