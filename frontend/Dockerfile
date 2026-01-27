@@ -38,6 +38,10 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
+# Copy entrypoint script for runtime env injection
+COPY entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+
 # Set correct permissions
 RUN chown -R nextjs:nodejs /app
 
@@ -48,5 +52,6 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["node", "server.js"]
+# Use entrypoint to inject runtime environment variables
+CMD ["./entrypoint.sh"]
 
