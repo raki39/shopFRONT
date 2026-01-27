@@ -14,6 +14,10 @@ import type {
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
+// Debug log for API URL
+console.log('[API] NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL)
+console.log('[API] API_URL being used:', API_URL)
+
 // Create axios instance
 const api = axios.create({
   baseURL: API_URL,
